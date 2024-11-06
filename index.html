@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>TEST-AR</title>
+
+    <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.2/aframe/build/aframe-ar.js"></script>
+    <script>
+        // 画像のソースを保持する配列
+        var images = [
+            "img/doc_01.png",
+            "img/doc_02.png",
+            "img/doc_03.png"
+        ];
+
+        var currentImageIndex = 0;
+
+        // 次の画像へ遷移する関数
+        function changeToNextImage() {
+            currentImageIndex = (currentImageIndex + 1) % images.length; // 次の画像のインデックス
+            updateImage();
+        }
+
+        // 前の画像へ遷移する関数
+        function changeToPreviousImage() {
+            currentImageIndex = (currentImageIndex - 1 + images.length) % images.length; // 前の画像のインデックス
+            updateImage();
+        }
+
+        // 画像のソースを更新する共通関数
+        function updateImage() {
+            document.getElementById("ar-image").setAttribute("src", images[currentImageIndex]); // 画像のソースを変更
+        }
+    </script>
+    <style>
+        .button-container {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px; /* ボタン間の間隔を少し広げる */
+        }
+
+        button {
+            padding: 15px 30px; /* ボタンの内側の余白を増やす */
+            font-size: 16px; /* テキストサイズを大きくする */
+            border-radius: 5px; /* ボタンの角を丸くする */
+            background-color: #f0f0f0; /* ボタンの背景色 */
+            border: none; /* ボーダーを消す */
+        }
+    </style>
+</head>
+
+<body style="margin : 0px; overflow: hidden;">
+    <a-scene embedded arjs="debugUIEnabled:false;">
+        <a-entity camera></a-entity>
+        <a-marker type="pattern" url="img/pattern_simple_qrcode.patt" smooth="true" smoothCount="10" smoothTolerance="0.01" smoothThreshold="2">
+            <a-image id="ar-image" width="3.55" height="2" position="0.0 0.0 0.0" rotation="-90 0 0" src="img/doc_01.png">
+            </a-image>
+        </a-marker>
+    </a-scene>
+
+    <div class="button-container">
+        <button onclick="changeToPreviousImage()">Back</button>
+        <button onclick="changeToNextImage()">Next</button>
+    </div>
+</body>
+
+</html>
